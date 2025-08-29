@@ -1,6 +1,6 @@
 <?php 
 session_start();
-$env = parse_ini_file(__DIR__ . '/.env');
+$env = parse_ini_file(__DIR__ . '/../.env');
 
 $spotify_client =  $env['SPOTIFY_CLIENT_ID'];
 $spotify_secret = $env['SPOTIFY_CLIENT_SECRET'];

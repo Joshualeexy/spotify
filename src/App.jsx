@@ -50,14 +50,27 @@ const App = () => {
   const getLoginTokenFromSpotify = async (code, state) => {
     const res = await axios.get(`${apiUrl}/callback.php?code=${code}&state=${state}`)
     if (res.data && res.data.status) {
-      localStorage.setItem('user', JSON.stringify({
-        accessToken: res.data.accessToken,
-        expiresAt: res.data.expiresAt
-      }))
-      setUser({
-        accessToken: res.data.accessToken,
-        expiresAt: res.data.expiresAt
-      })
+      const res2 = await axios.get('https://api.spotify.com/v1/me', {
+        headers: {
+          Authorization: `Bearer ${res.data.accessToken}`
+        }
+      });
+      if (res2 && res2.data) {
+        localStorage.setItem('user', JSON.stringify({
+          accessToken: res.data.accessToken,
+          expiresAt: res.data.expiresAt,
+          name: res2.data.display_name,
+          profileImg: res2.data.images?.[0]?.url || null
+        }))
+
+        setUser({
+          accessToken: res.data.accessToken,
+          expiresAt: res.data.expiresAt,
+          name: res2.data.display_name,
+          profileImg: res2.data.images?.[0]?.url || null
+        })
+      }
+
       alert("Login successful! You can now close this tab.")
     } else {
       alert(res.data.error || "Login failed")
@@ -71,10 +84,13 @@ const App = () => {
     setIsLoading(false)
   }
 
+  const createPlaylist = async () => {
+    setIsLoading(true) }
+
   return (
     <main className="h-screen w-full py-10 bg-black">
       {!user && <Index onClick={login} isLoading={isLoading} />}
-      {user && <Create isLoading={isLoading} name={user.name} />}
+      {user && <Create isLoading={isLoading} createPlaylist={createPlaylist} setIsLoading={setIsLoading} name={user.name} />}
 
     </main>
   )
