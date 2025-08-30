@@ -5,11 +5,11 @@ import Modal from "./components/Modal"
 import LoadingIcon from "./components/LoadingIcon"
 
 
-const Create = ({ isLoading, setIsLoading, createPlaylist, name }) => {
-    const [showModal, setShowModal] = useState(true)
+const Create = ({ isLoading, setIsLoading, setPlaylistName, createPlaylist, name,showModal,setShowModal }) => {
     const cancel = () => {
         setIsLoading(false)
         setShowModal(false)
+        setPlaylistName('')
     }
 
     return (
@@ -23,9 +23,9 @@ const Create = ({ isLoading, setIsLoading, createPlaylist, name }) => {
                             <XCircleIcon className="text-red-600 w-7 hover:cursor-pointer" onClick={cancel} />
                         </div>
                         <div className="">
-                            <input type="text" className="shadow-inner rounded-sm focus:border-0 focus:ring-0 focus:outline-0 text-white text-sm shadow-green-700 placeholder:text-gray-4  00 w-10/12 p-3" placeholder="Enter Playlist Name " />
+                            <input type="text" onChange={(e)=>{setPlaylistName(e.target.value)}} className="shadow-inner rounded-sm focus:border-0 focus:ring-0 focus:outline-0 text-white text-sm shadow-green-700 placeholder:text-gray-4  00 w-10/12 p-3" placeholder="Enter Playlist Name " />
                         </div>
-                        <AppButton onClick={createPlaylist} text={`${isLoading ? 'Creating' : 'Create playlist'}`} className="font-medium  mt-4 flex mx-auto" icon={isLoading ? <LoadingIcon className="ml-1 my-auto !w-4 !h-4"/> : <PlusIcon className="ml-1 text-black w-5" />} />
+                        <AppButton onClick={createPlaylist} text={`${isLoading ? 'Creating' : 'Create playlist'}`} className="font-medium  mt-4 flex mx-auto" icon={isLoading ? <LoadingIcon className="ml-1 my-auto !w-4 !h-4" /> : <PlusIcon className="ml-1 text-black w-5" />} />
                     </div>
                 </Modal>
             }
