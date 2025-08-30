@@ -2,7 +2,7 @@ import Index from "./Index";
 import Create from "./Create";
 import axios from "axios";
 import { useState, useEffect } from "react";
-const apiUrl = `http://${window.location.hostname}:3000/api/`
+const apiUrl = `https://api.oneclickplaylist.fun/api/`
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -107,7 +107,7 @@ const App = () => {
         `https://api.spotify.com/v1/users/${user.id}/playlists`,
         {
           name: playlistName,
-          description: "Created with NotDMs",
+          description: "Created with OneClickPlaylist",
           public: false
         },
         {
