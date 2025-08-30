@@ -10,6 +10,7 @@ const App = () => {
   const [playlistName, setPlaylistName] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [showPlaylistModal, setShowPlaylistModal] = useState(false)
+  const [playlistUri, setPlaylistUri] = useState(null)
 
 
   useEffect(() => {
@@ -119,6 +120,8 @@ const App = () => {
 
       const playlistId = createRes.data.id;
       const playlistUrl = createRes.data.external_urls.spotify;
+      setPlaylistUri(playlistUrl)
+      console.log(`Created playlist "${playlistName}" (${playlistId})`);
 
       // 2. Fetch ALL liked songs (paginate 50 at a time)
       let uris = [];
@@ -178,7 +181,7 @@ const App = () => {
   return (
     <main className="h-screen w-full py-10 bg-black">
       {!user && <Index onClick={login} isLoading={isLoading} />}
-      {user && <Create showModal={showModal} setShowModal={setShowModal} isLoading={isLoading} setPlaylistName={setPlaylistName} createPlaylist={createPlaylist} setIsLoading={setIsLoading} name={user.name} />}
+      {user && <Create playlistUri={playlistUri} showPlaylistModal={showPlaylistModal} setShowPlaylistModal={setShowPlaylistModal} showModal={showModal} setShowModal={setShowModal} isLoading={isLoading} setPlaylistName={setPlaylistName} createPlaylist={createPlaylist} setIsLoading={setIsLoading} name={user.name} />}
 
     </main>
   )
