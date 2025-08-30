@@ -1,6 +1,6 @@
 import AppButton from "./components/AppButton"
 import { useState, useEffect } from "react"
-import { ChevronDownIcon, PlusIcon, QuestionMarkCircleIcon, XCircleIcon } from "@heroicons/react/24/solid"
+import { ChevronDownIcon, PlusIcon, QuestionMarkCircleIcon, XCircleIcon, ShareIcon} from "@heroicons/react/24/solid"
 import Modal from "./components/Modal"
 import LoadingIcon from "./components/LoadingIcon"
 
@@ -11,6 +11,43 @@ const Create = ({playlistUri, isLoading, showPlaylistModal, setShowPlaylistModal
         setShowModal(false)
         setPlaylistName('')
     }
+  const copyPlaylistUri = () => {
+  if (navigator.clipboard && window.isSecureContext) {
+    // Modern way
+    navigator.clipboard.writeText(playlistUri)
+      .then(() => {
+        alert('Playlist URL copied to clipboard! Share it and flex on your friends Amigo 📢');
+      })
+      .catch(err => {
+        console.error('Clipboard write failed:', err);
+      });
+  } else {
+    // Fallback for older browsers
+    const textArea = document.createElement("textarea");
+    textArea.value = playlistUri;
+    textArea.style.position = "fixed";  // avoid scrolling
+    textArea.style.left = "-9999px";
+    textArea.style.top = "-9999px";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      const successful = document.execCommand('copy');
+      if (successful) {
+        alert('Playlist URL copied to clipboard! Share it and flex on your friends Amigo 📢');
+      } else {
+        alert('Press Ctrl+C to copy the playlist URL manually.');
+      }
+    } catch (err) {
+      console.error('Fallback copy failed:', err);
+      alert('Copy failed. Please copy manually.');
+    }
+
+    document.body.removeChild(textArea);
+  }
+};
+
 
     return (
         <>
@@ -37,8 +74,15 @@ const Create = ({playlistUri, isLoading, showPlaylistModal, setShowPlaylistModal
                             <h2 className="text-gray-400 font-bold">Share Playlist</h2>
                             <XCircleIcon className="text-red-600 w-7 hover:cursor-pointer" onClick={()=>{setShowPlaylistModal(false)}} />
                         </div>
-                        <div className="">
+                        <div className="text-gray-300"> 
+                            <h2 className="font-bold text-xl">Your vibe, your playlist.</h2>
+                            <p className="text-sm">All your liked tracks in one place click the share button to flex on it share it loud Amigo 📢.</p>
+                        </div>
+                        <div className="flex">
                             <input type="text" value={playlistUri && playlistUri} readOnly className="shadow-inner rounded-sm focus:border-0 focus:ring-0 focus:outline-0 text-white text-sm shadow-green-700 placeholder:text-gray-4  00 w-10/12 p-3" />
+                            <div className="bg-green-600 hover:bg-green-700 rounded-r-sm p-3 pl-2 pr-2 cursor-pointer" onClick={copyPlaylistUri}>
+                                <ShareIcon className="w-5 text-black" />
+                                </div>
                         </div>
                     </div>
                 </Modal>
